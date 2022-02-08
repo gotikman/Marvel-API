@@ -1,6 +1,11 @@
 
-#### Провірка API
-const marvelServise = new MarvelService();  //! створюєм дублікат класу для 
+## Initial Resource
++ Template https://www.figma.com/file/xiC1B6ZlHvbiUK6FO3caxN/Marvel-DB
++ Marvel API https://developer.marvel.com/docs
+
+## Провірка API
+const marvelServise = new MarvelService();  
+//! створюєм дублікат класу для...
 marvelServise.getAllCharacters().then(res => res.data.results.forEach(item => console.log(item.name))); 
 http://prntscr.com/22qy9a6
 
@@ -8,7 +13,7 @@ http://prntscr.com/22qy9a6
 
 
 
-# Getting Started with Create React App
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

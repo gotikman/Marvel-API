@@ -1,4 +1,4 @@
-import { Component } from "react";
+import { useState } from "react";
 import AppHeader from "../appHeader/AppHeader";
 import RandomChar from "../randomChar/RandomChar";
 import CharList from "../charList/CharList";
@@ -9,75 +9,33 @@ import decoration from '../../resources/img/vision.png';
 
 
 
-class App extends Component {
+const App = () => {
 
-    state = {
-        selectedChar: null,          //! стейт для підйому id
+    const [selectedChar, setChar] = useState();     //! стейт для підйому id
 
+    const onCharSelected = (id) => {               //! підйом id вибраного перса з CharList
+        setChar(id);
     }
 
-    onCharSelected = (id) => {         //! підйом id вибраного перса з CharList
-        this.setState({
-            selectedChar: id
-        })
-    }
-
-    render() {
-        return (
-            <div className="app">
-                <AppHeader />
-                <main>
+    return (
+        <div className="app">
+            <AppHeader />
+            <main>
+                <ErrorBoundary>
+                    <RandomChar />
+                </ErrorBoundary>
+                <div className="char__content">
                     <ErrorBoundary>
-                        <RandomChar />
+                        <CharList onCharSelected={onCharSelected} />
                     </ErrorBoundary>
-                    <div className="char__content">
-                        <ErrorBoundary>
-                            <CharList onCharSelected={this.onCharSelected} />
-                        </ErrorBoundary>
-                        <ErrorBoundary>
-                            <CharInfo charId={this.state.selectedChar} />
-                        </ErrorBoundary>
-                    </div>
-                    <img className="bg-decoration" src={decoration} alt="vision" />
-                </main>
-            </div>
-        )
-    }
+                    <ErrorBoundary>
+                        <CharInfo charId={selectedChar} />
+                    </ErrorBoundary>
+                </div>
+                <img className="bg-decoration" src={decoration} alt="vision" />
+            </main>
+        </div>
+    )
 }
-
-
-
-//! кнопка з вкл/викл компонента
-// class App extends Component {
-//     state = {
-//         showRandomChar: true
-//     }
-
-//     toggleRandomChar = () => {
-//         this.setState(({ showRandomChar }) => {
-//             return {
-//                 showRandomChar: !showRandomChar
-//             }
-//         })
-//     }
-
-//     render() {
-//         return (
-//             <div className="app">
-//                 <AppHeader />
-//                 <main>
-//                     {this.state.showRandomChar ? <RandomChar /> : null}
-
-//                     <button onClick={this.toggleRandomChar}>click</button>
-//                     <div className="char__content">
-//                         <CharList />
-//                         <CharInfo />
-//                     </div>
-//                     <img className="bg-decoration" src={decoration} alt="vision" />
-//                 </main>
-//             </div>
-//         )
-//     }
-// }
 
 export default App;
