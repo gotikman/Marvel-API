@@ -1,32 +1,25 @@
+import { useHttp } from '../hooks/http.hook';
 
-class MarvelService {
-    _apiBase = 'https://gateway.marvel.com:443/v1/public/';
-    _apiKey = 'apikey=663b4a9becd98b0462ce0969a62eb013';
-    _baseOffset = 210;
+const useMarvelService = () => {
+    const { loading, request, error, clearError } = useHttp();       //! витягую сутності з хука
 
-    getResource = async (url) => {
-        let res = await fetch(url);           // чекаєм і отримуєм promise дані по запросу
+    const _apiBase = 'https://gateway.marvel.com:443/v1/public/';
+    const _apiKey = 'apikey=663b4a9becd98b0462ce0969a62eb013';
+    const _baseOffset = 210;
 
-        // Обробка ситуації з помилкою в запросі fetch
-        if (!res.ok) {
-            throw new Error(`Could not fetch ${url}, status: ${res.status}`);
-        }
 
-        return await res.json();                // трансформ. в promise JS обєкт для подальшого викор.
+    const getCharacter = async (id) => {
+        const res = await request(`${_apiBase}characters/${id}?${_apiKey}`);
+        return _transformCharacter(res.data.results[0]);
     }
 
-    getAllCharacters = async (offset = this._baseOffset) => {   // offset по замовчуванню якщо не передається
-        const res = await this.getResource(`${this._apiBase}characters?limit=9&offset=${offset}&${this._apiKey}`);
-        return res.data.results.map(this._transformCharacter);
+    const getAllCharacters = async (offset = _baseOffset) => {   // offset по замовчуванню якщо не передається
+        const res = await request(`${_apiBase}characters?limit=9&offset=${offset}&${_apiKey}`);
+        return res.data.results.map(_transformCharacter);
     }
 
-    getCharacter = async (id) => {
-        const res = await this.getResource(`${this._apiBase}characters/${id}?${this._apiKey}`);
-        return this._transformCharacter(res.data.results[0]);
-    }
-
-    //! метод повертає обєкт від API тільки з потрібними полями
-    _transformCharacter = (char) => {
+    // метод повертає обєкт від API тільки з потрібними полями
+    const _transformCharacter = (char) => {
         return {
             name: char.name,
             description: char.description ? `${char.description.slice(0, 210)}...` : 'No data',
@@ -37,9 +30,69 @@ class MarvelService {
             comics: char.comics.items
         }
     }
+    //* ____________________________________
+    // const _Offset = 10;
+
+    // const getComics = async (offset = _Offset) => {
+    //     const res = await request(`https://gateway.marvel.com:443/v1/public/comics?limit=8&offset=${offset}&apikey=663b4a9becd98b0462ce0969a62eb013`);
+
+    //     return res.data.results.map(_transformComics)
+
+    // }
+
+    // const _transformComics = (comics) => {
+    //     return {
+    //         homepage: comics.urls[0].url,
+    //         thumbnail: comics.thumbnail.path + '.' + comics.thumbnail.extension,
+    //         title: comics.title,
+    //         price: comics.prices[0].price,
+    //         key: comics.id
+    //     }
+    // }
+    const getAllComics = async (offset = 1) => {
+        const res = await request(`${_apiBase}comics?orderBy=issueNumber&limit=8&offset=${offset}&${_apiKey}`);
+        return res.data.results.map(_transformComics);
+    }
+
+    const getComics = async (id) => {
+        const res = await request(`${_apiBase}comics/${id}?${_apiKey}`);
+        return _transformComics(res.data.results[0]);
+    }
+
+    const _transformComics = (comics) => {
+        return {
+            id: comics.id,
+            title: comics.title,
+            description: comics.description || 'There is no description',
+            pageCount: comics.pageCount ? `${comics.pageCount} p.` : 'No information about the number of pages',
+            thumbnail: comics.thumbnail.path + '.' + comics.thumbnail.extension,
+            language: comics.textObjects.language || 'en-us',
+            price: comics.prices[0].price ? `${comics.prices[0].price}$` : 'not available'
+        }
+    }
+
+    //* ____________________________________
+
+
+    return { loading, error, getAllCharacters, getCharacter, clearError, getAllComics, getComics };
 
 }
 
-//! провірка Сервісу http://prntscr.com/22qy9a6
+export default useMarvelService;
 
-export default MarvelService;
+
+
+//! провірка Сервісу
+//* http://prntscr.com/22qy9a6
+//* http://prntscr.com/26sa6bn
+
+//? getResource old
+// getResource = async (url) => {
+//     let res = await fetch(url);           // чекаєм і отримуєм promise дані по запросу
+
+//     if (!res.ok) {
+//         throw new Error(`Could not fetch ${url}, status: ${res.status}`);
+//     }
+
+//     return await res.json();                // трансформ. в promise JS обєкт для подальшого викор.
+// }

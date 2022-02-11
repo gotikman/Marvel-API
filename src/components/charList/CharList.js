@@ -3,36 +3,30 @@ import PropTypes from 'prop-types';
 
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMassage/ErrorMessage';
-import MarvelService from '../../services/MarvelService';
+import useMarvelService from '../../services/MarvelService';
 import './charList.scss';
 
 const CharList = (props) => {
 
     const [charList, setCharList] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
+
     const [newItemLoading, setNewItemLoading] = useState(false);
     const [offset, setOffset] = useState(210);                      // 1539 тестування останніх
     const [charEnded, setCharEnded] = useState(false);
 
-    const marvelServise = new MarvelService();
+    const { loading, error, getAllCharacters } = useMarvelService();  //!
 
     useEffect(() => {
-        onRequest();                          // викликаєм без значення, в сервісі підставиться дефолтний
+        onRequest(offset, true);                          // викликаєм без значення, в сервісі підставиться дефолтний
         // eslint-disable-next-line
-    }, [])                                    // [] - запускаєм 1 раз
+    }, [])                                                // [] - запускаєм 1 раз
 
-    const onRequest = (offset) => {           // загрузка і дозагрузка персонажів
-        onCharListLoading();                  // блокуєм кнопку при дозагрузці
-        marvelServise
-            .getAllCharacters(offset)
+    const onRequest = (offset, initial) => {              // загрузка і дозагрузка персонажів
+        initial ? setNewItemLoading(false) : setNewItemLoading(true);
+        getAllCharacters(offset)
             .then(onCharListLoaded)
-            .catch(onError)
     }
 
-    const onCharListLoading = () => {            // методо - індикатор дозагрузки персонажів , use 4 button off
-        setNewItemLoading(true)
-    }
 
     const onCharListLoaded = (newcharList) => {
         let ended = false;
@@ -41,16 +35,12 @@ const CharList = (props) => {
         }
 
         setCharList(charList => [...charList, ...newcharList]);  //? розгортаєм старі і дозагружені персонажі
-        setLoading(loading => false);
+
         setNewItemLoading(newItemLoading => false);              // включаєм кнопку після дозагрузки 
         setOffset(offset => offset + 9);                         //? зміщуєм діапазон дозагрузки персонажів   
         setCharEnded(charEnded => ended)
     }
 
-    const onError = () => {
-        setError(true);
-        setLoading(false);
-    }
 
     //! Створюю масив для Ref і функцію для добавлення call-back ref
     const itemRefs = useRef([]);
@@ -101,16 +91,14 @@ const CharList = (props) => {
 
     const items = renderItems(charList);
 
-    const spinner = loading ? <Spinner /> : null;
+    const spinner = loading && !newItemLoading ? <Spinner /> : null;
     const errorMassage = error ? <ErrorMessage /> : null;
-    const content = !(loading || error) ? items : null;
 
     return (
         <div className="char__list">
             {spinner}
             {errorMassage}
-            {content}
-
+            {items}
             <button
                 className="button button__main button__long"
                 disabled={newItemLoading}
