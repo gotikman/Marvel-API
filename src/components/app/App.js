@@ -13,13 +13,13 @@ const App = () => {
             <div className="app">
                 <AppHeader />
                 <main>
-                    <MainPage />
-                    {/* <Routes>
+
+                    <Routes>
                         <Route path="/" element={<MainPage />} />
                         <Route path="/comics" element={<ComicsPage />} />
                         <Route path="/comics/:comicId" element={<SingleComicPage />} />
                         <Route path="*" element={<Page404 />} />
-                    </Routes> */}
+                    </Routes>
 
                 </main>
             </div>
