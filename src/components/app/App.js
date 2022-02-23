@@ -20,7 +20,7 @@ const SinglePage = lazy(() => import('../pages/SinglePage'));
 const App = () => {
 
     return (
-        <HashRouter>
+        <HashRouter basename="/www-react-api">
             <div className="app">
                 <AppHeader />
                 <main>
