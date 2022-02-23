@@ -13,13 +13,13 @@ const RandomChar = () => {
 
     useEffect(() => {
         updateChar();
-        // const timirId = setInterval(updateChar, 6000)
+        const timirId = setInterval(updateChar, 6000)
 
-        // return () => {
-        //     clearInterval(timirId)
-        // }
+        return () => {
+            clearInterval(timirId)
+        }
 
-        // eslint-disable-next-line
+        //  eslint-disable-next-line
     }, [])
 
     const onCharLoaded = (char) => {          //! відповідає за кінцевий результат
