@@ -1,6 +1,6 @@
 
 import { lazy, Suspense } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, HashRouter } from 'react-router-dom';
 
 // import { MainPage, ComicsPage, SingleComicPage } from '../pages';
 import AppHeader from "../appHeader/AppHeader";
@@ -20,7 +20,7 @@ const SinglePage = lazy(() => import('../pages/SinglePage'));
 const App = () => {
 
     return (
-        <Router>
+        <HashRouter>
             <div className="app">
                 <AppHeader />
                 <main>
@@ -39,7 +39,7 @@ const App = () => {
 
                 </main>
             </div>
-        </Router >
+        </HashRouter >
     )
 }
 
