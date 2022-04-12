@@ -2,9 +2,7 @@ import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import useMarvelService from '../../services/MarvelService';
-import Spinner from '../spinner/Spinner';
-import ErrorMessage from '../errorMassage/ErrorMessage';
-import Skeleton from '../skeleton/Skeleton';
+import setContent from '../../utils/setContent';
 
 import './charInfo.scss';
 
@@ -12,7 +10,7 @@ const CharInfo = (props) => {
 
     const [char, setChar] = useState(null);
 
-    const { loading, error, getCharacter, clearError } = useMarvelService();
+    const { getCharacter, clearError, process, setProcess } = useMarvelService();
 
     useEffect(() => {
         updateChar()
@@ -28,6 +26,7 @@ const CharInfo = (props) => {
         clearError();
         getCharacter(charId)
             .then(onCharLoaded)
+            .then(() => setProcess('confirmed'))
     }
 
     const onCharLoaded = (char) => {          //! відповідає за кінцевий результат
@@ -35,25 +34,29 @@ const CharInfo = (props) => {
     }
 
     // _________________________________________________________
+    // const skeleton = char || loading || error ? null : <Skeleton />;
+    // const errorMassage = error ? <ErrorMessage /> : null;
+    // const spinner = loading ? <Spinner /> : null;
+    // const content = !(loading || error || !char) ? <View char={char} /> : null;
 
-    const skeleton = char || loading || error ? null : <Skeleton />;
-    const errorMassage = error ? <ErrorMessage /> : null;
-    const spinner = loading ? <Spinner /> : null;
-    const content = !(loading || error || !char) ? <View char={char} /> : null;
+    // return (
+    //     <div className="char__info" >
+    //         {skeleton}
+    //         {errorMassage}
+    //         {spinner}
+    //         {content}          
+    //     </div>
+    // )
 
     return (
         <div className="char__info" >
-            {skeleton}
-            {errorMassage}
-            {spinner}
-            {content}
+            {setContent(process, View, char)}
         </div>
     )
-
 }
 
-const View = ({ char }) => {
-    const { name, description, thumbnail, homepage, wiki, comics } = char;
+const View = ({ data }) => {
+    const { name, description, thumbnail, homepage, wiki, comics } = data;
     const checkCover = thumbnail.search('not_available') > 0 ? { objectFit: 'contain' } : null;
 
     return (
