@@ -27,10 +27,10 @@ const App = () => {
                     <Suspense fallback={<Spinner />}>
 
                         <Routes>
-                            <Route path="/www-react-api" element={<MainPage />} />
-                            <Route path="/www-react-api/comics" element={<ComicsPage />} />
-                            <Route path="/www-react-api/comics/:id" element={<SinglePage Component={SingleComicLayout} dataType='comic' />} />
-                            <Route path="/www-react-api/characters/:id" element={<SinglePage Component={SingleCharacterLayout} dataType='character' />} />
+                            <Route path="/demo-react-api" element={<MainPage />} />
+                            <Route path="/demo-react-api/comics" element={<ComicsPage />} />
+                            <Route path="/demo-react-api/comics/:id" element={<SinglePage Component={SingleComicLayout} dataType='comic' />} />
+                            <Route path="/demo-react-api/characters/:id" element={<SinglePage Component={SingleCharacterLayout} dataType='character' />} />
                             <Route path="*" element={<Page404 />} />
                         </Routes>
 
