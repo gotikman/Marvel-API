@@ -28,7 +28,7 @@ const CharSearchForm = () => {
     const results = !char ? null : char.length > 0 ?
         <div className="char__search-wrapper">
             <div className="char__search-success">There is! Visit {char[0].name} page?</div>
-            <Link to={`/demo-react-api/characters/${char[0].key}`} className="button button__secondary">
+            <Link to={`/demo-marvel-api/characters/${char[0].key}`} className="button button__secondary">
                 <div className="inner">To page</div>
             </Link>
         </div> :

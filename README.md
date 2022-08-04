@@ -1,11 +1,11 @@
 ## Demo
-+ :earth_americas: **GitHub Pages**    https://gotikman.github.io/demo-react-api/
++ :earth_americas: **GitHub Pages**    https://gotikman.github.io/demo-marvel-api/
 ## Initial Resource
 + Template https://www.figma.com/file/xiC1B6ZlHvbiUK6FO3caxN/Marvel-DB
 + Marvel API https://developer.marvel.com/docs
 
 ## Deploy 
-+ GitHub Pages --> https://gotikman.github.io/demo-react-api/
++ GitHub Pages --> https://gotikman.github.io/demo-marvel-api/
 + Heroku.com --> https://marvel-api-gotikman.herokuapp.com/www-react-api
 
 
