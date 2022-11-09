@@ -63,6 +63,7 @@ const CharList = (props) => {
         setCharEnded(charEnded => ended)
     }
 
+    console.log('charlist');                                     // rendering check
 
     //! Створюю масив для Ref і функцію для добавлення call-back ref
     const itemRefs = useRef([]);
